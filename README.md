@@ -1,6 +1,8 @@
 
 O Mapa-19 é um aplicativo desenvolvido com o objetivo de facilitar o mapeamento e identificação de contactos de forma totalmente digital. O sistema permite dinamizar em quase 90% o processo de rastreio de possíveis contactos de indivíduos infetados pelo novo vírus. O conceito de rastreamento de contato é informar às pessoas que elas podem ter entrado em contato com outras que contraíram a Covid-19, permitindo também que as autoridades governamentais tenham acesso aos contactos feitos por indivíduos contaminados pela covid-19.
-O Mapa-19 possui uma interface bastante ergonómica e intuitiva de modo a proporcionar uma ótima experiencia aos usuários.![Untitled (1)](https://user-images.githubusercontent.com/58696746/117217723-85a4ad00-ae0a-11eb-9c4a-e5ee466fd1a6.jpg)
+O Mapa-19 possui uma interface bastante ergonómica e intuitiva de modo a proporcionar uma ótima experiencia aos usuários.
+![a](https://user-images.githubusercontent.com/58696746/117218172-517dbc00-ae0b-11eb-88a6-37c2c76c63a4.jpg)
+
 <h1>Funcionamento</h1>
 Através de uma versão de baixa energia das redes sem fio dos Smartphones, o aplicativo deteta proximidade física entre usuários do aplicativo, sendo que caso os algoritmos verifiquem que o distanciamento físico entre os smartphones é inferior a 5m os mesmo efetuam uma troca de chaves (chave exclusiva para cada dispositivo). O aplicativo permite fazer o rastreio de contactos de forma segura, privada, sem acesso a internet e em segundo plano, isso significa que o usuário não precisa estar com o aplicativo aberto em tela para que o mesmo funcione e efetue o registo de contactos.Na prática, o cidadão com resultado positivo para Covid-19 disponibiliza no aplicativo (Mapa-19) de forma voluntária e anônima o seu estado, as pessoas que constam na lista de contactos dos últimos 14 dias são instantaneamente notificadas para comparecerem ao centro de saúde para testagem.
 <h1>Segurança</h1> 
