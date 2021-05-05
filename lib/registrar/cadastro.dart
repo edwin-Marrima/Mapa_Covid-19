@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mapa_covid/Estatico.dart';
 import 'package:mapa_covid/Estatico/padroesDesign.dart';
+import 'package:mapa_covid/Main/home.dart';
 import 'package:mapa_covid/Main/principal.dart';
 import 'package:mapa_covid/classes/classe.dart';
 import 'package:mapa_covid/conectividade/conectividade.dart';
@@ -61,7 +62,7 @@ class _CadastroState extends State<Cadastro> {
           Estatico.user = usuario(nome: txt.text,contacto_alt: number_2.text,contacto: number_1.text,estado: 'false');
           progress=false;
           setState(() {});
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Principal(),), (Route<dynamic> route) => false);
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) =>Home(),), (Route<dynamic> route) => false);
 
         }
   @override

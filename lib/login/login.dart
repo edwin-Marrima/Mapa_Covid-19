@@ -10,6 +10,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mapa_covid/database/firebase/loginPhone.dart';
 import 'package:mapa_covid/database/subscribe.dart';
 import 'package:string_validator/string_validator.dart';
+import 'package:mapa_covid/Main/home.dart';
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
@@ -61,7 +62,7 @@ if(x){
   cadastroUsuarioLocal instancia  = cadastroUsuarioLocal();
   await instancia.dropDataBase();
   int retorno = await instancia.saveUser(Estatico.user);
-  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Principal(),), (Route<dynamic> route) => false);
+  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Home(),), (Route<dynamic> route) => false);
 }else{
   Estatico.user.contacto = txt.text;
   Navigator.pushNamed(context,'/Cadastro');
@@ -164,7 +165,7 @@ void dirigir()async{
   cadastroUsuarioLocal instancia = cadastroUsuarioLocal();
  // await instancia.dropDataBase();
   if(await instancia.getAllUsers()>0){
-    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Principal(),), (Route<dynamic> route) => false);
+    Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (BuildContext context) => Home(),), (Route<dynamic> route) => false);
   }else{
 
   }

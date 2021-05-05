@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:geolocator/geolocator.dart';
@@ -26,13 +27,9 @@ class _HomeState extends State<Home> {
   String dados ='cc';
   String contacto;
   bool a=false;
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   List<Contacto> lista = [];
-  Future<LocationData> localizacao() async{
-    Location location = Location();
-    LocationData aa = await location.getLocation();
-    return aa;
-  }
+
 Future<void> infoAdiciona(String userContact) async{
    bool existencia = false;
    var x = DateTime.now();
@@ -54,20 +51,19 @@ Future<void> infoAdiciona(String userContact) async{
       Contacto contacto = lista[i];
       lista.removeAt(i);lista.insert(0, contacto);
       await contactoDataBase.AtualizaContacto(contacto);
-
       existencia =true;
       break;
     }
   }
   if(!existencia) {
-    LocationData posicao = await localizacao();
     print('Ola');
     Contacto contacto = Contacto(contacto_main: Estatico.user.contacto,contacto: nr_celular,data: dataa,nr_contactos: 1,
-        latitude: posicao.latitude.toString(),longitude: posicao.longitude.toString(),estado: estado);
+        latitude: Estatico.locationData.latitude.toString(),longitude:Estatico.locationData.longitude.toString(),estado: estado);
         lista.insert(0,contacto);
     await contactoDataBase.gravaContacto(contacto);
   }
   setState(() {});
+   Estatico.EstList = this.lista;
   }
   Future<void> descobrir_usuariosProximos() async{
     await Nearby().stopDiscovery();
@@ -99,6 +95,7 @@ Future<void> infoAdiciona(String userContact) async{
 
   void conexao() async{
     getPermissions();
+    localizacao();
     await Nearby().stopAdvertising();
     try {
       bool a = await Nearby().startAdvertising(
@@ -124,6 +121,13 @@ Future<void> infoAdiciona(String userContact) async{
     color: Colors.orange[900],
     size: 40.0,
   ));
+  Future<void> localizacao() async{
+    Location location = Location();
+    LocationData aa = await location.getLocation();
+    Estatico.locationData = aa;
+    print(Estatico.locationData.longitude);
+    print(Estatico.locationData.latitude);
+  }
   _listaEmpty()=>Padding(
     padding: EdgeInsets.all(15),
   child: !Estatico.rede?_networkProblem():spinkit,
@@ -132,10 +136,10 @@ Future<void> infoAdiciona(String userContact) async{
     Conectividade conectividade = Conectividade();
     conectividade.conectividade_dois((){if(mounted){setState(() {});}});
     this.lista = await carrega.carregaContactosDataBase((){if(mounted){setState(() {});}});
+    Estatico.EstList = this.lista;
     setState(() {});
     conexao();
     setState(() {});
-
   }
 
   @override
@@ -146,79 +150,157 @@ Future<void> infoAdiciona(String userContact) async{
     print(this.contacto);
    // Estatico.user = usuario(estado: 'true',contacto: '840000000',contacto_alt: '840233996',nome: 'Edwin Marrima');
     DownList();
+  }
+  _snackbar(String text,Color fundo){
+    final snackbar = new SnackBar(
+      content:  Text(text,
+        style: TextStyle(
+          color: Colors.cyan[100],
+          letterSpacing: 1.1,
+        ),),
 
-
+      backgroundColor: fundo,
+      duration: Duration(seconds: 5),
+    );
+    _scaffoldKey.currentState.showSnackBar(snackbar);
   }
   @override
   Widget build(BuildContext context) {
+    var sw = MediaQuery.of(context).size.width;
+    var sh = MediaQuery.of(context).size.height;
     return Scaffold(
+      key:  _scaffoldKey,
       backgroundColor: Colors.white,
-      body: SingleChildScrollView(
-        child: SafeArea(
-          child: Center(
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.fromLTRB(10, 30, 10, 0),
-                  child: Column(
-                    children: <Widget>[
-                     Text(Estatico.user.nome ,style: TextStyle(letterSpacing: 1.0,fontFamily: 'Tenali',fontWeight:FontWeight.bold,color: Colors.black,fontSize: 32)),
-                      Text(Estatico.user.estado=='false'?'Não infetado':'Contaminado' ,style: TextStyle(letterSpacing: 1.0,fontFamily: 'Montserrat',color: Colors.black,fontSize: 15)),
+      body:  SafeArea(
+          child: SingleChildScrollView(
+            child: Center(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(10, 20, 10, 0),
+                    child: Center(
+                      child: Container(
+                        width: sw*0.96,
+                        decoration: _decoracao,
+                        child: Column(
+                          children: <Widget>[
 
-                      Switch(
-                        value: Estatico.user.estado=='false'?false:true,
-                        onChanged: (value)async{
-                          Estatico.user.estado = value?'true':'false';
-                          if(value){this.contacto =Estatico.user.contacto;this.contacto=this.contacto+" 1";}
-                          else{this.contacto =Estatico.user.contacto;this.contacto=this.contacto+" 0";}
-                          setState(() {});
-                          if(await carrega.alterarEstado(value)){}
-                          else{Estatico.user.estado = !value?'true':'false';
-                          cadastroUsuarioLocal local = cadastroUsuarioLocal();
-                          local.updateEstadoUser();
-                          }
-                        setState(() {});
-                        },
-                      )
+                           Text(Estatico.user.nome ,style: TextStyle(letterSpacing: 1.0,fontFamily: 'Tenali',fontWeight:FontWeight.bold,color: Colors.black,fontSize: 32)),
+                            Text(Estatico.user.estado=='false'?'Não infetado':'Contaminado' ,style: TextStyle(letterSpacing: 1.0,fontFamily: 'Montserrat',color: Colors.black,fontSize: 15)),
+
+                            Switch(
+                              value: Estatico.user.estado=='false'?false:true,
+                              onChanged: (value)async{
+                                Estatico.user.estado = value?'true':'false';
+                                if(value){this.contacto =Estatico.user.contacto;this.contacto=this.contacto+" 1";}
+                                else{this.contacto =Estatico.user.contacto;this.contacto=this.contacto+" 0";}
+                                setState(() {});
+                                if(await carrega.alterarEstado(value)){}
+                                else{Estatico.user.estado = !value?'true':'false';
+                                cadastroUsuarioLocal local = cadastroUsuarioLocal();
+                                local.updateEstadoUser();
+                                }
+                              setState(() {});
+                              },
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+
+                  ),
+                  SizedBox(height: 15,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text('Buscando  ' ,style: TextStyle(letterSpacing: 1.0,fontFamily: 'Montserrat',color: Colors.black,fontSize: 15)),
+                      Container(height: 10,width: 15,
+                          child: CircularProgressIndicator(backgroundColor: Colors.red,)),
+                      Text('  contactos' ,style: TextStyle(letterSpacing: 1.0,fontFamily: 'Montserrat',color: Colors.black,fontSize: 15)),
                     ],
                   ),
 
-                ),
-                SizedBox(height: 30,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('Buscando  ' ,style: TextStyle(letterSpacing: 1.0,fontFamily: 'Montserrat',color: Colors.black,fontSize: 15)),
-                    Container(height: 10,width: 15,
-                        child: CircularProgressIndicator(backgroundColor: Colors.red,)),
-                    Text('  contactos' ,style: TextStyle(letterSpacing: 1.0,fontFamily: 'Montserrat',color: Colors.black,fontSize: 15)),
-                  ],
-                ),
-
-                Container(
-                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                  margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                  decoration: decoracao,
-                  height: 400,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: lista.length==0? <Widget>[_listaEmpty()]
-                      :lista.map((dados)=> ClicloCont(
-                        contacto: dados,
-                      )).toList(),
+                  Container(
+                    padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                    margin: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    decoration: decoracao,
+                    height: 400,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: lista.length==0? <Widget>[_listaEmpty()]
+                        :lista.map((dados)=> ClicloCont(
+                          contacto: dados,
+                        )).toList(),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 25,),
-              ],
+                  SizedBox(height: 13,),
+
+                ],
+              ),
             ),
           ),
         ),
-      )
+ bottomSheet: Container(
+   margin: EdgeInsets.fromLTRB(7, 0, 7,3),
+   width: sw,
+   height: 50,
+  decoration: _decoracao,
+   child: FlatButton(
+     child: Container(
+       child: Column(
+         children: <Widget>[
+           Icon(Icons.location_on,color: Colors.cyan[900],),
+           Text('Mapeamento',style: TextStyle(fontFamily: 'Montserrat',fontWeight: FontWeight.bold),),
+         ],
+       ),
+     ),
+     onPressed: () async{
+       if(Estatico.locationData.toString()=='null'){
+         showD(context,'O serviço de geocalização esta provavelmente'
+             ' desativado ou a aplicação não possui autorização para aceder a localização'
+             ' do dispositivo.');
+       }else if(!Estatico.rede){
+
+         showD(context,'Verifique o seu pacote de dados ou a sua conexão a internet.');
+       }else{
+         await Navigator.of(context).pushNamed('/Mapeamento',arguments: {});
+       }
+
+     },
+   ),
+ ),
     );
   }
 }
-var decoracao = BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadius.all(Radius.circular(9)),
+void showD(BuildContext context,String txt){
+  showDialog(context: context,
+      barrierDismissible: false,
+      builder: (context)=>Container(
+        child: AlertDialog(
+          title: Text('Tentativa mal sucedida',style: TextStyle(letterSpacing: 1.0,fontFamily: 'Montserrat',color: Colors.black,fontSize: 15,fontWeight: FontWeight.bold),textAlign: TextAlign.center,),
+          content: Container(
+            //decoration: decoracao,
+            child:Wrap(
+              children: <Widget>[
+                Text(txt,style: TextStyle(letterSpacing: 1.0,fontFamily: 'Montserrat',color: Colors.black,fontSize: 15),textAlign: TextAlign.justify,),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Fechar"),
+              onPressed: () async{
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+      )
+  );
+}
+
+var decoracao = BoxDecoration(color: Colors.white, borderRadius: BorderRadius.all(Radius.circular(9)),
   boxShadow: [
     BoxShadow(
       color:Colors.grey.withOpacity(0.5),
@@ -227,6 +309,29 @@ var decoracao = BoxDecoration(color: Colors.grey[100], borderRadius: BorderRadiu
       offset: Offset(0,7),
     )
   ],
+);
+var _decoracao = BoxDecoration(
+gradient: LinearGradient(
+begin:  Alignment.topLeft,
+end: Alignment.bottomRight,
+stops: [0.3,1],
+colors:[
+Colors.grey,
+Colors.red,
+
+],
+),
+borderRadius: BorderRadius.all(
+Radius.circular(15),
+),
+boxShadow: [
+BoxShadow(
+color:Colors.grey.withOpacity(0.7),
+spreadRadius: 5,
+blurRadius: 7,
+offset: Offset(0,7),
+)
+],
 );
 void getPermissions()async {
  await Nearby().askLocationAndExternalStoragePermission();

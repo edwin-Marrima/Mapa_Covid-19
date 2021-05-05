@@ -13,9 +13,9 @@ class Conectividade{
       print(aa==true? "True":"false");
     });
     if(result == true){
-      print("tem megas");
+      print("network");
     }else{
-      print("Nao ha megas");
+      print("error! internet connection failed");
     }
     return result; }
 }

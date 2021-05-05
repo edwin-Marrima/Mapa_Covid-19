@@ -35,8 +35,8 @@ class Contacto{
     map['nr_contactos'] = contacto.nr_contactos;
     map['data']  =contacto.data;
     map['contacto']  =contacto.contacto;
-    map['latitude']  =contacto.longitude;
-    map['longitude']  =contacto.latitude;
+    map['latitude']  =contacto.latitude;
+    map['longitude']  =contacto.longitude;
     map['contacto_main']  =contacto.contacto_main;
     return map;
   }
