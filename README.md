@@ -14,6 +14,9 @@ que são gerados pelo aplicativo (localização, numero de celular, numero de co
 O processo atualmente empregue para a identificação de contactos e consequente mapeamento das áreas de transmissão local exige a aplicação de elevados recursos humanos e financeiros, outro défice esta relacionado a qualidade dos dados que são coletados, visto que em dadas situações são incompletos e o tempo levado para a coleta e tratamento (dados) é elevado. O nível de transmissão local vem crescendo de forma exponencial em Moçambique, sendo assim, é necessário cada vez mais profissionais e recursos para que o processo de mapeamento consiga acompanhar o ritmo da pandemia. O Mapa-19 constitui uma ferramenta tecnológica que vem para dar resposta aos problemas enfrentados pelo governo Moçambicano para fazer face ao Covid-19, visto que poderá dinamizar o processo de mapeamento e identificação de contactos.
 <h1>Interfaces</h1>
 <h1></h1>
+
 ![Screenshot_20200901-011149](https://user-images.githubusercontent.com/58696746/117217946-f1871580-ae0a-11eb-9c44-8d83b1d8a75a.jpg)
+
 ![Screenshot_20200901-011024](https://user-images.githubusercontent.com/58696746/117217954-f3e96f80-ae0a-11eb-82c5-5049dd5a2806.jpg)
+
 ![IMG-20200824-WA0022](https://user-images.githubusercontent.com/58696746/117217991-02d02200-ae0b-11eb-8308-24bbd5ead70d.jpg)
